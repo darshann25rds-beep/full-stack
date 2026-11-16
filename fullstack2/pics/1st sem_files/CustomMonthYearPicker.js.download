@@ -1,0 +1,108 @@
+/**
+ * MonthYearPicker based on Bootstrap 5
+ * https://www.vit.ac.in/
+ *
+ * CustomDateTimePicker.js
+ * Copyright Software Development Cell (SDC), Vellore Institute of Technology (VIT)
+ * 
+ *
+ * Date: Mar-2024
+ */
+
+
+
+class CustomMonthYearPicker {
+
+    withParameters(params) {
+
+        this.currentElementId = params.name;
+        this.yearBaseValue = params.yearBaseValue || '1900';
+        this.yearCeilingValue = params.yearCeilingValue || '2075';
+        this.defaultValue =params.defaultValue || '';
+        this.onChange=params.onChange;
+
+        return this;
+    }
+
+    activate() {
+        let defaultMonth=this.defaultValue.substring(0,3);
+        let defaultYear=this.defaultValue.substring(4,8);
+        if(defaultMonth != null && defaultMonth != undefined ) {
+            document.getElementById(this.currentElementId).value=defaultMonth+"-"+defaultYear;
+        }
+        document.getElementById(this.currentElementId + 'cmypYearValue').value=defaultYear;
+        document.getElementById(this.currentElementId + 'cmypMonthValue').value=defaultMonth;
+        this.initializeMonth(defaultMonth,this.currentElementId);
+        this.initializeYear(defaultYear, this.yearBaseValue,this.yearCeilingValue,this.currentElementId);
+
+    }
+
+    initializeMonth(defaultMonth,currentElementId) {
+        let cdpMonthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let cdpSelectTag = document.getElementById(currentElementId + 'cmypMonthContent');
+
+        for (var cdpmNum = 0; cdpmNum < cdpMonthList.length; cdpmNum++) {
+            let cdpEl = document.createElement("button");
+            cdpEl.value=cdpMonthList[cdpmNum];
+            cdpEl.innerHTML = cdpMonthList[cdpmNum];
+            cdpEl.type='button';
+            cdpEl.classList.add("btn", "btn-sm","btn-outline-primary", "border-0","month_year_button_css", "px-2", "fw-bold", "fs-6", this.currentElementId+"cmyp_monthElement");
+            cdpEl.dataset.refname = currentElementId;
+            cdpSelectTag.appendChild(cdpEl);
+        }
+
+        let cmypmonth = document.getElementsByClassName(currentElementId + "cmyp_monthElement");
+        for (let i = 0; i < cmypmonth.length; i++) {
+            cmypmonth[i].addEventListener('click', this.setMonth.bind(this.onChange));
+        }
+
+    }
+
+    initializeYear(defaultYear, yearBaseValue, yearCeilingValue, currentElementId) {
+
+        let cdpSelectTag = document.getElementById(currentElementId + 'cmypYearContent');
+
+        for (var cdpmNum = yearBaseValue; cdpmNum <= yearCeilingValue; cdpmNum++) {
+            var cdpEl = document.createElement("button");
+            cdpEl.value=cdpmNum;
+            cdpEl.innerHTML = cdpmNum;
+            cdpEl.type='button';
+            cdpEl.classList.add("btn", "btn-sm", "btn-outline-primary", "border-0","month_year_button_css", "px-2", "fw-bold", "fs-6", this.currentElementId+"cmyp_yearElement");
+            cdpEl.dataset.refname = currentElementId;
+            cdpSelectTag.appendChild(cdpEl);
+        }
+    
+        let cmypyear = document.getElementsByClassName(this.currentElementId + "cmyp_yearElement");
+        for (let i = 0; i < cmypyear.length; i++) {
+            cmypyear[i].addEventListener('click', this.setYear.bind(this.onChange));
+        }
+
+    }
+
+    setMonth(event) {
+        let targetDayObject = event.target;
+        let currentElementId = targetDayObject.dataset.refname;
+        let monthValue = targetDayObject.value;
+        document.getElementById(currentElementId + 'cmypMonthValue').value=monthValue;
+        let yearValue = document.getElementById(currentElementId + 'cmypYearValue').value;
+        document.getElementById(currentElementId).value = monthValue + "-"+yearValue;
+
+        if (this !== undefined) {
+            this();
+        }
+    }
+
+    setYear(event) {
+        let targetDayObject = event.target;
+        let currentElementId = targetDayObject.dataset.refname;
+        let yearValue = targetDayObject.value;
+
+        document.getElementById(currentElementId + 'cmypYearValue').value=yearValue;
+        let monthValue = document.getElementById(currentElementId + 'cmypMonthValue').value;
+        document.getElementById(currentElementId).value = monthValue + "-"+yearValue;
+
+        if (this !== undefined) {
+            this();
+        }
+    }
+}

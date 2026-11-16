@@ -1,0 +1,154 @@
+/**
+ * MultiSelect based on Bootstrap 5
+ * https://www.vit.ac.in/
+ *
+ * multiselect.js
+ * Copyright Software Development Cell (SDC), Vellore Institute of Technology (VIT)
+ *
+ *
+ * Date: Jun-2025
+ */
+
+class CustomSelect extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  static get observedAttributes() {
+    return ['value'];
+  }
+
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (name === 'value' && this.value !== newVal) {
+      this.value = newVal;
+    }
+  }
+
+  get value() {
+    return this.getAttribute('value');
+  }
+
+  set value(val) {
+    this.setAttribute('value', val);
+  }
+
+  connectedCallback() {
+    const name = this.getAttribute("name") || "select";
+    const height = this.getAttribute("height") || "300px";
+    const width = this.getAttribute("width") || "300px";
+    const formField = this.getAttribute("data-form-field") || '';
+    const dropdowntype = this.getAttribute("data-dropdown-type") || 'dropdown-menu-end';
+
+    const options = Array.from(this.querySelectorAll("option")).map(opt => ({
+      value: opt.getAttribute("value"),
+      text: opt.textContent,
+      class: opt.getAttribute("class") || '',
+      selected: opt.hasAttribute("selected") ||''
+    }));
+
+    this.innerHTML = this.renderDropdown(name, height, width, options, dropdowntype);
+
+    this.attachSearchFilter(name);
+    this.attachAllMenuItems(name, formField);
+    this.setDefaultValue(name, options, formField);
+  }
+
+  renderDropdown(name, height, width, options, dropdowntype) {
+    const listItems = options.map((item, index) => `
+      <button class="list-group-item list-group-item-action ${item.class}"
+              type="button"
+              name="${name}"
+              id="${name}${index}"
+              data-value="${item.value}"
+              ${item.selected ? "checked" : ""}>
+        <span>${item.text}</span>
+      </button>
+    `).join("");
+
+    return `
+      <div class="dropdown">
+        <button class="btn border border-gray bg-white form-control dropdown-toggle overflow-hidden"
+                type="button"
+                style="min-width: ${width};"
+                data-bs-toggle="dropdown"
+                id="drpdwnBtn${name}"
+                data-bs-auto-close="true"
+                aria-expanded="false">
+          Select from the list...
+        </button>
+        <div class="dropdown-menu ${dropdowntype}">
+          <div class="input-group mb-2 px-2">
+            <input type="text" class="form-control" placeholder="Search" aria-label="Search">
+            <label class="input-group-text"><i class="bi bi-search"></i></label>
+            <button class="btn btn-outline-secondary clear-btn" type="button"><i class="bi bi-x-circle"></i></button>
+          </div>
+          <div class="list-group list-group-flush overflow-auto"
+               style="max-height: ${height}; min-width: ${width};">
+            ${listItems}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  attachAllMenuItems(name, formField) {
+    const listItems = this.querySelectorAll(".list-group-item-action");
+    for (let c = 0; c < listItems.length; c++) {
+      listItems[c].addEventListener('click', (event) => {
+        let currentBtn = event.currentTarget;
+        let parentBtn = this.querySelector(`#drpdwnBtn${name}`);
+        parentBtn.innerHTML = currentBtn.innerHTML;
+
+        this.value = currentBtn.dataset.value;
+
+        if (formField !== '') {
+          let htmlFormField = document.getElementById(formField);
+          if (htmlFormField) {
+            htmlFormField.value = currentBtn.dataset.value;
+          }
+        }
+
+        // 🔥 notify outside
+        this.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    }
+  }
+
+  attachSearchFilter(name) {
+    const input = this.querySelector("input.form-control");
+    const clearBtn = this.querySelector(".clear-btn");
+    const listItems = this.querySelectorAll("button.list-group-item");
+
+    input.addEventListener("input", () => {
+      const term = input.value.toLowerCase();
+      listItems.forEach(li => {
+        const labelText = li.innerText.toLowerCase();
+        li.classList.toggle("d-none", !labelText.includes(term));
+      });
+    });
+
+    clearBtn?.addEventListener("click", () => {
+      input.value = "";
+      listItems.forEach(li => li.classList.remove("d-none"));
+    });
+  }
+
+  setDefaultValue(name, options, formField) {
+    const selectedOption = options.find(opt => opt.selected);
+    if (selectedOption) {
+      let parentBtn = this.querySelector(`#drpdwnBtn${name}`);
+      parentBtn.innerHTML = selectedOption.text;
+      this.value = selectedOption.value;
+
+      if (formField !== '') {
+        let htmlFormField = document.getElementById(formField);
+        if (htmlFormField) {
+          htmlFormField.value = selectedOption.value;
+        }
+      }
+    }
+  }
+}
+
+customElements.define('custom-select', CustomSelect);
+

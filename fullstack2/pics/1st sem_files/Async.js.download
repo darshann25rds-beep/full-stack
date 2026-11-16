@@ -1,0 +1,73 @@
+       async function asyncCall(url, targetDivId) {
+
+              const now = new Date();
+              const params = `authorizedID=${encodeURIComponent(id)}&${csrfName}=${encodeURIComponent(csrfValue)}&x=${encodeURIComponent(now.toUTCString())}`;
+              try {
+                const response = await fetch(url, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                  },
+                  credentials: 'same-origin',
+                  body: params
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch");
+
+                const data = await response.text();
+                let division = document.getElementById(targetDivId);
+                division.innerHTML = data;
+                const inlineScripts = division.querySelectorAll('script:not([src])');
+                inlineScripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                    document.body.removeChild(newScript); // Clean up
+                });
+              } catch (error) {
+                let division = document.getElementById(targetDivId);
+                if (!division) {
+                    console.error(`Target div with id="${targetDivId}" not found.`);
+                    return;
+                }
+                division.innerHTML = "Error loading content.";
+              }
+        }
+
+
+        async function downloadFileWithProgress(url, filename) {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Network response was not ok");
+
+            const contentLength = response.headers.get("Content-Length");
+            if (!contentLength) {
+                console.warn("Content-Length header is missing; progress won't be accurate.");
+            }
+
+            const total = parseInt(contentLength, 10);
+            let loaded = 0;
+
+            const reader = response.body.getReader();
+            const chunks = [];
+            document.getElementById('downloadProgress').classList.remove('d-none');
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                chunks.push(value);
+                loaded += value.length;
+
+                // Update progress bar
+                const percent = total ? (loaded / total) * 100 : 0;
+                document.getElementById("downloadProgress").value = percent;
+            }
+
+            const blob = new Blob(chunks);
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+            document.getElementById('downloadProgress').classList.add('d-none');
+        }

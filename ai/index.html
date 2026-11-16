@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Darshan's Stock Analyzer</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <header>
+        <h1>EXPERT DARSHAN'S</h1>
+        <h2>STOCK ANALYZER</h2>
+    </header>
+
+    <section class="action-panel">
+
+        <p class="instructions">
+            Add up to 3 stock tickers below to get an AI-generated stock report 👇
+        </p>
+
+        <form id="ticker-input-form">
+
+            <input
+                id="ticker-input"
+                type="text"
+                placeholder="Enter ticker (e.g. AAPL)"
+                autocomplete="off"
+            >
+
+            <button type="submit">+</button>
+
+        </form>
+
+        <p id="error-message"></p>
+
+        <div class="ticker-choice-display"></div>
+
+        <button class="generate-report-btn" disable>Generate Report</button>
+
+    </section>
+
+    <section class="loading-panel">
+
+        <img src="loading.svg" alt="Loading" class="loading-svg">
+        <h2 id="api-message">Fetching stock market data...</h2>
+
+    </section>
+
+    <section class="output-panel">
+
+    </section>
+
+    <script type="module" src="main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+/**
+ * DateTimePicker based on Bootstrap 5
+ * https://www.vit.ac.in/
+ *
+ * CustomDateTimePicker.js
+ * Copyright Software Development Cell (SDC), Vellore Institute of Technology (VIT)
+ * 
+ *
+ * Date: Dec-2023 
+ */
+
+
+class CustomDateTimePicker {
+
+    withParameters(params) {
+
+        if (params.name == undefined) {
+            throw new Error('name is mandatory')
+        }
+        this.currentElementId = params.name;
+        this.yearBaseValue = params.yearBaseValue || '1900';
+        this.yearCeilingValue = params.yearCeilingValue || '2075'
+        this.enableDateFrom = params.enableDateFrom || ''
+        this.enableDateTill = params.enableDateTill || ''
+        this.selectedDay = 0;
+        this.calendarStyle = params.calendarStyle || '';
+        this.defaultValue = params.defaultValue || '';
+
+        let cdpWeekDays = document.getElementsByClassName(this.currentElementId + "cdtpDay");
+        for (let i = 0; i < cdpWeekDays.length; i++) {
+            cdpWeekDays[i].addEventListener('click', this.setDate.bind(params.onChange));
+        }
+
+        let inputbox = document.getElementById(this.currentElementId);
+        inputbox.addEventListener('keydown', (event) => {
+            console.log(event.keyCode);
+            if (!CustomDateTimePicker.isNumberKey(event)) {
+                event.preventDefault();
+            }
+        });
+
+        return this;
+    }
+
+    activate() {
+
+        let cdtpResetTag = document.getElementById(this.currentElementId + 'cdtpDateSeletorResetBtn');
+        let cdpCloseTag = document.getElementById(this.currentElementId + 'cdtpDateSeletorCloseBtn');
+
+        let cdpCMonth;
+        let cdpCYear;
+        let cdpDay;
+        let cdpHour;
+        let cdpMin;
+
+        if (this.defaultValue === '') {
+            cdpCMonth = new Date().getMonth();
+            cdpCYear = new Date().getFullYear();
+        } else {
+            let defaultDate = new Date(this.defaultValue);
+            cdpCMonth = defaultDate.getMonth();
+            cdpCYear = defaultDate.getFullYear();
+            cdpDay = defaultDate.getDate();
+            cdpHour = defaultDate.getHours();
+            cdpMin = defaultDate.getMinutes();
+            
+            document.getElementById(this.currentElementId + 'cdtpTimeHourContent').value=cdpHour;
+            document.getElementById(this.currentElementId + 'cdtpTimeMinuteContent').value=cdpMin;
+            document.getElementById(this.currentElementId).value = CustomDateTimePicker.constructDate(cdpDay, cdpCMonth, cdpCYear, cdpHour, cdpMin);
+        }
+
+        this.initializeMonth(cdpCMonth, this.currentElementId);
+        this.initializeYear(cdpCYear, this.yearBaseValue, this.yearCeilingValue, this.currentElementId);
+        this.initializeTime(this.currentElementId);
+
+        cdtpResetTag.dataset.defaultMonth = cdpCMonth;
+        cdtpResetTag.dataset.defaultYear = cdpCYear;
+        cdtpResetTag.dataset.defaultValue = this.defaultValue;
+
+
+        cdtpResetTag.addEventListener('click', (event) => {
+            let targetDomObject = event.target;
+            let refName = targetDomObject.dataset.refname;
+            let cdpCMonth = targetDomObject.dataset.defaultMonth;
+            let cdpCYear = targetDomObject.dataset.defaultYear;
+            let defaultValue = targetDomObject.dataset.defaultValue;
+            this.populate(cdpCMonth, cdpCYear, refName);
+            document.getElementById(refName + 'cdtpYear').value = cdpCYear;
+            document.getElementById(refName + 'cdtpMonth').value = cdpCMonth;
+            CustomDateTimePicker.parseDefaultValue(this.currentElementId, defaultValue);
+        })
+
+        cdpCloseTag.addEventListener('click', (event) => {
+            let targetDomObject = event.target;
+            let refName = targetDomObject.dataset.refname;
+            let cdpddownBtnElement = document.getElementById(refName + 'cdtpDateSeletorBtn');
+            let cdpddownBtn = bootstrap.Dropdown.getInstance(cdpddownBtnElement);
+            cdpddownBtn.hide();
+        });
+
+        this.populate(cdpCMonth, cdpCYear, this.currentElementId);
+    }
+
+    static parseDefaultValue(currentElementId, defaultValue) {
+        if (defaultValue !== '') {
+            let defaultDate = new Date(defaultValue);
+            let cdpCMonth = defaultDate.getMonth();
+            let cdpCYear = defaultDate.getFullYear();
+            let cdpDay = defaultDate.getDate();
+            let cdpHour = defaultDate.getHours();
+            let cdpMin = defaultDate.getMinutes();
+            document.getElementById(currentElementId).value = CustomDateTimePicker.constructDate(cdpDay, cdpCMonth, cdpCYear, cdpHour, cdpMin);
+        } else {
+            document.getElementById(currentElementId).value = '';
+        }
+    }
+
+    initializeMonth(defaultMonth, currentElementId) {
+        let cdpMonthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let cdpSelectTag = document.getElementById(this.currentElementId + 'cdtpMonth');
+
+        for (var cdpmNum = 0; cdpmNum < cdpMonthList.length; cdpmNum++) {
+            var cdpEl = document.createElement("option");
+            cdpEl.textContent = cdpMonthList[cdpmNum];
+            cdpEl.value = cdpmNum;
+            cdpEl.classList.add("cdtpDateStyle");
+            if (cdpmNum === defaultMonth) {
+                cdpEl.setAttribute('selected', true);
+            }
+            cdpSelectTag.appendChild(cdpEl);
+        }
+
+        cdpSelectTag.addEventListener('change', (event) => {
+            let targetDomObject = event.target;
+            let cdpMvalue = targetDomObject.value;
+            let refName = targetDomObject.dataset.refname;
+            let cdpYvalue = document.getElementById(refName + 'cdtpYear').value;
+            this.populate(cdpMvalue, cdpYvalue, refName);
+        });
+
+    }
+
+    initializeYear(defaultYear, yearBaseValue, yearCeilingValue, currentElementId) {
+
+        let cdpSelectTag = document.getElementById(currentElementId + 'cdtpYear');
+
+        for (var cdpmNum = yearBaseValue; cdpmNum <= yearCeilingValue; cdpmNum++) {
+            var cdpEl = document.createElement("option");
+            cdpEl.textContent = cdpmNum;
+            cdpEl.value = cdpmNum;
+            cdpEl.classList.add("cdtpDateStyle");
+            if (cdpmNum === defaultYear) {
+                cdpEl.setAttribute('selected', true);
+            }
+            cdpSelectTag.appendChild(cdpEl);
+        }
+
+        cdpSelectTag.addEventListener('change', (event) => {
+            let targetDomObject = event.target;
+            let cdpYvalue = targetDomObject.value;
+            let refName = targetDomObject.dataset.refname;
+            let cdpMvalue = document.getElementById(refName + 'cdtpMonth').value;
+            this.populate(cdpMvalue, cdpYvalue, refName);
+        });
+    }
+
+    initializeTime(currentElementId) {
+
+        let cdpSelectTagArray1 = document.getElementById(currentElementId + 'cdtpTimeHourContent');
+
+        cdpSelectTagArray1.addEventListener('change', (event) => {
+            let targetDomObject = event.target;
+            let cdtpHourValue = targetDomObject.value;
+            let refName = targetDomObject.dataset.refname;
+            let cdtpMinuteValue = document.getElementById(refName + 'cdtpTimeMinuteContent').value;
+            this.setTime(cdtpHourValue, cdtpMinuteValue, refName);
+        });
+
+        let cdpSelectTagArray2 = document.getElementById(currentElementId + 'cdtpTimeMinuteContent');
+
+        cdpSelectTagArray2.addEventListener('change', (event) => {
+            let targetDomObject = event.target;
+            let cdtpMinuteValue = targetDomObject.value;
+            let refName = targetDomObject.dataset.refname;
+            let cdtpHourValue = document.getElementById(refName + 'cdtpTimeHourContent').value;
+            this.setTime(cdtpHourValue, cdtpMinuteValue, refName);
+        });
+
+    }
+
+
+    lastDay(y, m) {
+        let startDate = new Date(y, m, 27);
+        let calculatedDay;
+        let checkMonth = startDate.getMonth();
+        while (checkMonth == m) {
+            calculatedDay = startDate.getDate();
+            startDate.setDate(startDate.getDate() + 1);
+            checkMonth = startDate.getMonth();
+        };
+
+        return calculatedDay;
+        //return new Date(y, m + 1, 0).getDate();
+    }
+
+    populate(month, year, refName) {
+
+        let cdpProcessingDate = new Date(year, month, 1);
+        let cdpMonthStartDay = cdpProcessingDate.getDay();
+        let cdpMonthEndDay = this.lastDay(year, month);
+        let cdpStartCountDay = 1;
+
+        var cdpWeekDays = document.getElementsByClassName(refName + "cdtpDay");
+        for (let i = 0; i < cdpWeekDays.length; i++) {
+            cdpWeekDays[i].textContent = '';
+            cdpWeekDays[i].value = '';
+            cdpWeekDays[i].classList.add('disabled');
+        }
+
+        for (let cdpRowCount = 0; cdpRowCount <= 6; cdpRowCount++) {
+
+            for (; cdpMonthStartDay <= 6; cdpMonthStartDay++) {
+
+                let tagName = this.currentElementId + 'cdtpW' + cdpRowCount + cdpMonthStartDay;
+                let cdpCalDayElem = document.getElementById(tagName);
+                cdpCalDayElem.value = cdpStartCountDay;
+                cdpCalDayElem.textContent = cdpStartCountDay;
+                if (!this.isDisabled(cdpStartCountDay)) {
+                    cdpCalDayElem.classList.remove('disabled');
+                }
+                cdpStartCountDay++;
+                if (cdpStartCountDay > cdpMonthEndDay) {
+                    cdpRowCount = 100;
+                    break;
+                }
+
+            }
+            cdpMonthStartDay = 0;
+        }
+    }
+
+    setDate(event) {
+        let targetDayObject = event.target;
+        let currentElementId = targetDayObject.dataset.refname;
+        let cdpMonthValue = document.getElementById(currentElementId + 'cdtpMonth').value;
+        let cdpYearValue = document.getElementById(currentElementId + 'cdtpYear').value;
+        let dayValue = targetDayObject.value;
+        let hour = document.getElementById(currentElementId + 'cdtpTimeHourContent').value;
+        let minute = document.getElementById(currentElementId + 'cdtpTimeMinuteContent').value;
+        document.getElementById(currentElementId).value = CustomDateTimePicker.constructDate(dayValue, cdpMonthValue, cdpYearValue,hour,minute);
+
+        if (this !== undefined) {
+            this();
+        }
+    }
+
+    setTime(cdtphour, cdtpminute, refname) {
+        let cdtpTag = document.getElementById(refname);
+        let updateValue = cdtpTag.value.substring(0, 10);
+        cdtpTag.value = updateValue + " " + cdtphour + ":" + cdtpminute
+    }
+
+    isDisabled(dayValue) {
+
+        if (this.enableDateFrom !== '') {
+
+            let startRange = new Date(this.enableDateFrom);
+            let cdpMonthValue = document.getElementById(this.currentElementId + 'cdpMonth').value;
+            let cdpYearValue = document.getElementById(this.currentElementId + 'cdpYear').value;
+            let checkDate = new Date(cdpYearValue, cdpMonthValue, dayValue);
+
+            if (this.enableDateTill !== undefined && this.enableDateTill !== '') {
+
+                let endRange = new Date(this.enableDateTill);
+                if (checkDate.valueOf() >= startRange.valueOf() && checkDate.valueOf() <= endRange.valueOf()) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                if (checkDate.valueOf() >= startRange.valueOf()) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    static constructDate(paramDay, paramMonth, paramYear, paramHour, paramMin) {
+
+        
+
+        let monthValue="";
+        let dayValue="";
+        let hourValue="";
+        let minValue="";
+
+        if (paramMonth !== undefined) {
+            
+            paramMonth = (Number(paramMonth) + 1).toString();
+
+            if (paramMonth.toString().length == 1) {
+                monthValue = "0" + paramMonth;
+            } else {
+                monthValue = paramMonth;
+            }
+        }
+
+        if (paramDay !== undefined) {
+            if (paramDay.toString().length == 1) {
+                dayValue = "0" + paramDay;
+            } else {
+                dayValue = paramDay;
+            }
+        }
+
+        if (paramHour !== undefined) {
+            if (paramHour.toString().length == 1) {
+                hourValue = "0" + paramHour;
+            } else {
+                hourValue = paramHour;
+            }
+        }
+
+        if (paramMin !== undefined) {
+            if (paramMin.toString().length == 1) {
+                minValue = "0" + paramMin;
+            } else {
+                minValue = paramMin;
+            }
+        }
+
+        return dayValue + "-" + monthValue + "-" + paramYear + " " + hourValue + ":" + minValue;
+    }
+
+    static isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+
+        if (charCode != 46 && charCode != 189 && charCode != 186 && charCode > 32
+            && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+}

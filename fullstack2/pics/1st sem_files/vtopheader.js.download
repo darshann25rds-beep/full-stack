@@ -1,0 +1,130 @@
+$(document).ready(function () {
+    let headerdiv = document.getElementById('vtop-header');
+    let hmenudiv = document.getElementById('top-hmenu-bar');
+    let vtopbodydiv = document.getElementById('vtop-body-content');
+
+    if (headerdiv) {
+        let offsetHeight = headerdiv.offsetHeight;
+
+        if (hmenudiv) {
+            hmenudiv.style.position = "relative";          // ensure positioned
+            hmenudiv.style.top = offsetHeight + "px";      // add px
+        }
+
+        if (vtopbodydiv) {
+            vtopbodydiv.style.position = "relative";       // ensure positioned
+            vtopbodydiv.style.top = offsetHeight + "px";
+        }
+    }
+});
+
+var etiquetteBtn= document.getElementById('campusEtiquetteBtn');
+etiquetteBtn.addEventListener('click',showEtiquette);
+
+function showEtiquette() {
+      const params =`authorizedID=${encodeURIComponent(id)}&${csrfName}=${encodeURIComponent(csrfValue)}&x=${encodeURIComponent(now.toUTCString())}`;
+      new ConfirmBox().withParameters({
+            submitTo: {
+                url: "show/etiquette",
+                data : params
+            },
+            updateResponseTo: "messageBox"
+       }).call();
+}
+
+function printCoreDocument(evt) {
+
+	var htmlConfigs = document.getElementById('configHead').innerHTML
+
+	var divElements = document.getElementById('core-container').innerHTML;
+	var printWindow = window.open("", "_blank", "");
+	printWindow.document.open();
+	printWindow.document.write('<html style="overflow:scroll;"><head><title> VTOP </title> ' + htmlConfigs + '</head><body>');
+	printWindow.document.write("");
+	printWindow.document.write(divElements);
+	printWindow.document.write(removeScrollBar());
+	printWindow.document.write(removeButtons());
+	printWindow.document.write('</body></html>');
+
+	printWindow.document.close();
+	printWindow.focus();
+
+}
+
+
+var anchorLinkBtn = document.getElementById("printVTOPCoreDocument");
+anchorLinkBtn.addEventListener('click', printCoreDocument);
+
+
+
+function getButtonBar() {
+	var btnBarElem = document.getElementById("sidePanel");
+	if (btnBarElem.classList.contains("d-none")) {
+		btnBarElem.classList.remove("d-none");
+	} else {
+		btnBarElem.classList.add("d-none");
+	}
+}
+
+
+function removeButtons() {
+	return "<script>"
+		+ " $(document).ready(function () {"
+		+ " let submitbtns = document.querySelectorAll('[type="+"\""+"submit"+"\""+"]'); "
+		+ " for (let i = 0; i < submitbtns.length; i++) { "
+		+ " 	 submitbtns[i].hidden=true;"
+		+ " } "
+		+ " let btns = document.querySelectorAll('[type="+"\""+"button"+"\""+"]'); "
+		+ " for (let i = 0; i < btns.length; i++) { "
+		+ " 	 btns[i].hidden=true;"
+		+ " } "		
+		+ " let nButtons =document.getElementsByClassName('btn'); "
+		+ " for (let i = 0; i < nButtons.length; i++) {  "
+		+ "   nButtons[i].hidden=true;"
+		+ " } "
+		+ "}); "
+		+ " </script>";
+}
+
+
+function getPrintButton() {
+	return "<div class='container-fluid'>" +
+		"<div class='row'>" +
+		"<div class='col-12 text-right'>" +
+		"  <a class='btn btn-lg btn-primary' href='javascript:void(0);' id='printPreviewDoc'>" +
+		"<i class='bi bi-printer text-light ps-sm-3 h2' aria-hidden='true'></i> PRINT </a>" +
+		"</div>";
+
+}
+
+function attachListener() {
+	return "<script>var anchorLinkBtn=document.getElementById('printPreviewDoc'); " +
+		"anchorLinkBtn.addEventListener('click',printDoc); " +
+		"</script>";
+}
+
+function printDocScript() {
+	return "<script> function printDoc() { " +
+		" document.body.style.overflow = 'hidden'; " +
+		" document.getElementById('b3wrapper').classList.remove('overflow-auto');" +
+		" document.getElementById('b3wrapper').classList.add('overflow-hidden');" +
+		" document.getElementById('printPreviewDoc').style.display = 'none'; " +
+		" setTimeout(function () {" +
+		" window.print();" +
+		" window.close();" +
+		" }, 100); " +
+		"}</script> ";
+}
+
+function removeScrollBar() {
+	return "<script> " +
+		" document.getElementById('b3wrapper').classList.remove('overflow-auto');" +
+		" document.getElementById('b3wrapper').classList.remove('vh-100');" +
+		" document.getElementById('b3wrapper').classList.remove('noshow');" +
+		" document.getElementById('b3wrapper').classList.remove('showBlock');" +
+		" </script>";
+
+}
+
+
+

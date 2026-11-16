@@ -1,0 +1,137 @@
+/**
+ * TimePicker based on Bootstrap 5
+ * https://www.vit.ac.in/
+ *
+ * CustomTimePicker.js
+ * Copyright Software Development Cell (SDC), Vellore Institute of Technology (VIT)
+ * 
+ *
+ * Date: Jan-2024
+ */
+
+
+class CustomTimePicker {
+
+    withParameters(params) {
+
+        if (params.name == undefined) {
+            throw new Error('name is mandatory')
+        }
+        this.currentElementId = params.name;
+        this.calendarStyle = params.calendarStyle || '';
+        this.defaultValue = params.defaultValue || '';
+        this.hourformat = 24;
+
+        let inputbox = document.getElementById(this.currentElementId);
+        inputbox.addEventListener('keydown', (event) => {
+            if (!CustomTimePicker.isNumberKey(event)) {
+                event.preventDefault();
+            }
+        });
+
+        return this;
+    }
+
+    activate() {
+
+        let ctpResetTag = document.getElementById(this.currentElementId + 'ctpDateSeletorResetBtn');
+        let ctpCloseTag = document.getElementById(this.currentElementId + 'ctpDateSeletorCloseBtn');
+
+        this.initializeTime(this.currentElementId, this.hourformat);
+
+        ctpResetTag.dataset.defaultValue = this.defaultValue;
+
+        ctpResetTag.addEventListener('click', (event) => {
+            let targetDomObject = event.target;
+            let refName = targetDomObject.dataset.refname;
+            let defaultValue = targetDomObject.dataset.defaultValue;
+            document.getElementById(refName).value = defaultValue;
+        })
+
+        ctpCloseTag.addEventListener('click', (event) => {
+            let targetDomObject = event.target;
+            let refName = targetDomObject.dataset.refname;
+            let cdpddownBtnElement = document.getElementById(refName + 'ctpDateSeletorBtn');
+            let cdpddownBtn = bootstrap.Dropdown.getInstance(cdpddownBtnElement);
+            cdpddownBtn.hide();
+        });
+
+    }
+
+    initializeTime(currentElementId, hourformat) {
+
+        let cdpSelectTagArray1 = document.getElementById(currentElementId + 'ctpTimeHourContent');
+        //let ampmelement = document.getElementById(currentElementId + 'ampmdiv');
+
+        let limit;
+        if (hourformat == 12) {
+            limit = 11;
+          //  ampmelement.classList.remove('d-none');
+        } else {
+            limit = 23;
+            //ampmelement.classList.add('d-none');
+        }
+
+
+        for (let i = 0; i <= limit; i++) {
+            let val;
+            if (i < 10) {
+                val = '0' + i;
+            } else {
+                val = i;
+            }
+            let opt = document.createElement('option');
+            opt.value = val;
+            opt.innerHTML = val;
+            cdpSelectTagArray1.appendChild(opt);
+        }
+
+        cdpSelectTagArray1.addEventListener('change', (event) => {
+            let targetDomObject = event.target;
+            let cdtpHourValue = targetDomObject.value;
+            let refName = targetDomObject.dataset.refname;
+            let cdtpMinuteValue =  document.getElementById(refName + 'ctpTimeMinuteContent').value;
+            this.setTime(cdtpHourValue, cdtpMinuteValue, this.hourformat, refName);
+        });
+
+        let cdpSelectTagArray2 = document.getElementById(currentElementId + 'ctpTimeMinuteContent');
+
+        cdpSelectTagArray2.addEventListener('change', (event) => {
+            let targetDomObject = event.target;
+            let cdtpMinuteValue = targetDomObject.value;
+            let refName = targetDomObject.dataset.refname;
+            let cdtpHourValue = document.getElementById(refName + 'ctpTimeHourContent').value;
+            this.setTime(cdtpHourValue, cdtpMinuteValue, this.hourformat, refName);
+        });
+
+        let radioButtonSection = document.getElementsByName(currentElementId + 'ampm');
+
+        for (var i = 0; i < radioButtonSection.length; i++) {
+            radioButtonSection[i].addEventListener('click', (event) => {
+                let targetDomObject = event.target;
+                let refName = targetDomObject.dataset.refname;
+                let cdtpHourValue = document.getElementById(refName + 'ctpTimeHourContent').value;
+                let cdtpMinuteValue =  document.getElementById(refName + 'ctpTimeMinuteContent').value;
+                this.setTime(cdtpHourValue, cdtpMinuteValue, "12", refName);
+            });
+        }
+
+    }
+
+    setTime(cdtphour, cdtpminute, hourformat, refname) {
+        let ampmvalue = "";
+        if (hourformat == 12) {
+            ampmvalue = " "+document.querySelector("input[name=" + refname + "ampm" + "]:checked").value;
+        }
+        let cdtpTag = document.getElementById(refname);
+        cdtpTag.value = cdtphour + ":" + cdtpminute +  ampmvalue;
+    }
+
+    static isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode != 46 && charCode != 189 && charCode != 186 && charCode > 31
+            && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+}

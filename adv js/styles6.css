@@ -1,0 +1,31 @@
+@font-face{
+    font-family: milker;
+    src: url("fonts/Milker.otf");
+}
+
+body{
+    background-color: #000000;
+    font-family: milker;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: center;
+    align-items: center;
+    letter-spacing: 2px;
+}
+
+div{
+    background-color: #1C2431;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 400px;
+    height: 300px;
+    color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

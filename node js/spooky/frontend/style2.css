@@ -1,0 +1,197 @@
+@font-face{
+    font-family: spooky;
+    src: url(fonts/spooky.ttf);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:
+    linear-gradient(rgba(0,0,0,.65),
+    rgba(0,0,0,.65)),
+    url(giphy/reaper.gif);
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    color:white;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+
+nav{
+
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+
+    padding:25px 60px;
+
+}
+
+
+.links a{
+
+    text-decoration:none;
+
+    color:white;
+
+    margin-left:25px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+    font-family:spooky;
+
+}
+
+.links a:hover{
+
+    color:#c40000;
+    text-shadow:0 0 12px red;
+}
+
+
+h3{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    font-family:spooky;
+
+    font-size:30px;
+
+    letter-spacing:2px;
+
+}
+
+h1{
+
+    text-align:center;
+
+    margin-top:15px;
+
+    margin-bottom:60px;
+
+    font-size:75px;
+
+    font-family:spooky;
+
+    letter-spacing:4px;
+
+}
+
+
+.form-box{
+
+    display:flex;
+
+    justify-content:center;
+
+    padding-bottom:60px;
+
+}
+
+form{
+
+    width:700px;
+
+}
+
+label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    margin-top:25px;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}
+
+input{
+
+    width:100%;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:6px;
+
+    padding:15px;
+
+    font-size:24px;
+
+    outline:none;
+
+}
+
+textarea{
+
+    width:100%;
+
+    height:160px;
+
+    resize:none;
+
+    border:none;
+
+    border-radius:6px;
+
+    padding:15px;
+
+    font-size:24px;
+
+    outline:none;
+
+}
+
+button{
+
+    width:100%;
+
+    margin-top:40px;
+
+    height:70px;
+
+    background:transparent;
+
+    color:white;
+
+    border:3px solid white;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-family:spooky;
+
+    font-size:42px;
+
+    letter-spacing:3px;
+
+    transition:.3s;
+
+}
+
+button:hover{
+    background:white;
+    color:black;
+
+}

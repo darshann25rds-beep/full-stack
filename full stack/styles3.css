@@ -1,0 +1,36 @@
+body{
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 20px;
+    font-family: "Audiowide", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    background-image: url("images/nature.avif");
+    background-size: cover;
+}
+
+.pic{
+    width: 200px;
+}
+
+.main{
+    width: 400px;
+    margin: 0 auto;
+    background: linear-gradient(to bottom, rgba(1, 116, 187, 0.8), rgba(119, 218, 246, 0.8));
+    padding: 20px;
+    border: 1px dotted rgb(1, 2, 2);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    border-bottom: 7px solid rgb(22, 184, 184);
+
+    font-family: "Cinzel Decorative", serif;
+    font-weight: 700;
+    ;
+}

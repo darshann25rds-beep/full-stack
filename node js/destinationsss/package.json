@@ -1,0 +1,12 @@
+{
+  "name": "wild_horizons",
+  "version": "1.0.0",
+  "description": "a dataset of planets most intresting places",
+  "license": "ISC",
+  "author": "DARSHAN",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

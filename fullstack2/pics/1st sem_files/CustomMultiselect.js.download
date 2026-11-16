@@ -1,0 +1,88 @@
+/**
+ * MultiSelect based on Bootstrap 5
+ * https://www.vit.ac.in/
+ *
+ * multiselect.js
+ * Copyright Software Development Cell (SDC), Vellore Institute of Technology (VIT)
+ * 
+ *
+ * Date: Dec-2023 
+ */
+
+
+class CustomMultiSelect {
+
+    activate(params) {
+        if (params.name == undefined) {
+            throw new Error('name is mandatory')
+        }
+
+        let container1=document.querySelector("div#ddpdm1"+params.name);
+        let container2=document.querySelector("ul#ddpdm1"+params.name);
+
+        if(params.onSelect !== undefined) {
+            this.onSelect=params.onSelect;
+            let checkboxes = document.querySelectorAll('input[name="'+params.name+'"]');
+            for (let i = 0; i < checkboxes.length; ++i) {
+                checkboxes[i].addEventListener('change',params.onSelect);
+            }
+        }
+
+         if(container1) {
+            if(params.height !== undefined) {
+                container1.style.height=params.height;
+            }
+            let callbackFunc = function searchText(event) {
+                let labelList = container1.getElementsByTagName("span");
+                let typedText = event.target.value.toLowerCase();
+                for (let i = 0; i < labelList.length; ++i) {
+                    let searchValue = labelList[i].textContent.toLowerCase();
+                    if (searchValue.includes(typedText)) {
+                        labelList[i].parentElement.parentElement.classList.remove("d-none");
+                    } else {
+                        labelList[i].parentElement.parentElement.classList.add("d-none");
+                    }
+                }
+            }
+
+            const searchBar = document.querySelector('#ddsib1' + params.name);
+            searchBar.addEventListener('input', callbackFunc);
+         }
+
+         if(container2) {
+            if(params.height !== undefined) {
+                container2.style.height=params.height;
+            }
+            let callbackFunc = function searchText(event) {
+                let labelList = container2.getElementsByTagName("span");
+                let typedText = event.target.value.toLowerCase();
+                for (let i = 0; i < labelList.length; ++i) {
+                    let searchValue = labelList[i].textContent.toLowerCase();
+                    if (searchValue.includes(typedText)) {
+                        labelList[i].parentElement.classList.remove("d-none");
+                    } else {
+                        labelList[i].parentElement.classList.add("d-none");
+                    }
+                }
+            }
+
+            const searchBar = document.querySelector('#ddsib1' + params.name);
+            searchBar.addEventListener('input', callbackFunc);
+         }
+
+
+
+        let delFunc= function(event) {
+            document.querySelector('#ddsib1' + params.name).value="";
+            let parentList=  document.querySelector("ul#ddpdm1"+params.name);
+            let labelList = parentList.getElementsByTagName("label");
+            for (let i = 0; i < labelList.length; ++i) {
+                labelList[i].classList.remove("d-none");
+            }
+        }
+        const delBtn1 = document.querySelector('#ddsb3' + params.name);
+        delBtn1.addEventListener('click', delFunc);
+
+    }
+
+}

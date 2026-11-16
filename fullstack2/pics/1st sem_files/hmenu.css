@@ -1,0 +1,59 @@
+
+.rotate-caret {
+   display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.overlay-window {
+    z-index:999;
+}
+
+.adm-overlay-window {
+    z-index:977;
+}
+
+.horizontal-menu-color {
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: rgb(222,184,135);
+	background-color: rgb(255,255,255);
+    //background-color : rgb(249,246,239);
+}
+
+.menuColor1 {
+    color : rgb(135,0,21);
+}
+
+.menuBorderStyle {
+    border-width: 0px 0px 5px 0px;
+    border-color:rgb(158,158,158);
+    border-style: solid;
+}
+
+.previewWindow {
+    min-height:550px;
+}
+
+.offCanvasWidth {
+    width: 560px;
+}
+
+.hmenu-sticky {
+  position: sticky;
+  top: 51; /* or another offset */
+  left:0;
+  z-index: 1020; /* same as .sticky-top */
+}
+
+.list-group-item.list-group-item-action:hover {
+  background-color: #E0E7FF; /* change to your desired color */
+  cursor: pointer;          /* optional: show pointer on hover */
+}
+
+@media (max-width: 767px) {
+  .hmenubox {
+    min-height:900px;
+    height:900px;
+  }
+
+}

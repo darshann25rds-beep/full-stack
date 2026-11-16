@@ -1,0 +1,270 @@
+@font-face {
+    font-family: spooky;
+    src: url("fonts/spooky.ttf");
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} 
+
+body{
+
+    background:
+    linear-gradient(rgba(0,0,0,.65),
+    rgba(0,0,0,.65)),
+    url("giphy/reaper.gif");
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    color:white;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+
+nav{
+    display:flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 25px 60px;
+}
+
+.links a{
+
+    color:white;
+    text-decoration:none;
+
+    margin-left:25px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    transition:.3s;
+    font-family:spooky;
+
+}
+
+.links a:hover{
+
+    color:#c40000;
+    text-shadow:0 0 12px red;
+}
+
+
+h2{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    font-size:30px;
+
+    font-family:spooky;
+
+    letter-spacing:2px;
+
+}
+
+h1{
+
+    text-align:center;
+
+    font-size:75px;
+
+    margin-top:15px;
+
+    margin-bottom:50px;
+
+    font-family:spooky;
+
+    letter-spacing:4px;
+
+}
+
+@font-face{
+    font-family: spooky;
+    src: url(fonts/spooky.ttf);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:
+    linear-gradient(rgba(0,0,0,.65),
+    rgba(0,0,0,.65)),
+    url(giphy/forest.gif);
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    color:white;
+
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+
+nav{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:25px 60px;
+
+}
+
+.logo{
+
+    width:55px;
+
+}
+
+.links a{
+
+    color:white;
+    text-decoration:none;
+
+    margin-left:25px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.links a:hover{
+
+    color:#c40000;
+    text-shadow:0 0 12px red;
+}
+
+
+
+h3{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    font-size:30px;
+
+    font-family:spooky;
+
+    letter-spacing:2px;
+
+}
+
+h1{
+
+    text-align:center;
+
+    font-size:75px;
+
+    margin-top:15px;
+
+    margin-bottom:50px;
+
+    font-family:spooky;
+
+    letter-spacing:4px;
+
+}
+
+
+.container{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:30px;
+
+    padding-bottom:60px;
+
+}
+
+.card{
+
+    width:700px;
+
+    background:white;
+
+    color:#333;
+
+    border-radius:8px;
+
+    padding:30px;
+
+    box-shadow:0px 0px 15px rgba(0,0,0,.5);
+
+}
+
+
+.date{
+
+    color:gray;
+
+    font-size:17px;
+
+    margin-bottom:15px;
+
+}
+
+.card h2{
+
+    font-size:42px;
+
+    margin-bottom:18px;
+
+}
+
+.story{
+
+    font-size:31px;
+
+    color:#555;
+
+    line-height:1.4;
+
+    margin-bottom:20px;
+
+}
+
+.card a{
+
+    float:right;
+
+    color:#222;
+
+    text-decoration:none;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+}
+
+.card a:hover{
+
+    color:#c40000;
+}
+
+

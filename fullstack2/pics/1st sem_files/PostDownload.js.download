@@ -1,0 +1,53 @@
+
+
+class PostDownload {
+
+
+    async download(params, urlToHit) {
+
+        let csrfname = '';
+        let csrfvalue = '';
+        let authorizedID=document.getElementById('authorizedIDX').value;
+
+        let htmlform = document.createElement("form");
+        htmlform.setAttribute("method", "post");
+        htmlform.setAttribute("action", urlToHit);
+        htmlform.setAttribute("id", "genericfunctionforpostdownload");
+
+        Object.entries(params).map(entry => {
+            let key = entry[0];
+            let value = entry[1];
+            if (key === 'csrfname') {
+                csrfname = value;
+            } else if (key === 'csrfvalue') {
+                csrfvalue = value;
+            } else {
+                let inputTag = document.createElement("input");
+                inputTag.setAttribute("type", "text");
+                inputTag.setAttribute("name", key);
+                inputTag.setAttribute("value",value);
+                htmlform.appendChild(inputTag); 
+            }
+        });
+
+        let inputTag = document.createElement("input");
+        inputTag.setAttribute("type", "hidden");
+        inputTag.setAttribute("name", csrfname);
+        inputTag.setAttribute("value", csrfvalue);
+        htmlform.appendChild(inputTag); 
+
+        let inputTag2 = document.createElement("input");
+        inputTag2.setAttribute("type", "hidden");
+        inputTag2.setAttribute("name", "authorizedID");
+        inputTag2.setAttribute("value", authorizedID);
+        htmlform.appendChild(inputTag2); 
+
+        let htmlBody=document.getElementsByTagName("body")[0];
+
+        htmlBody.appendChild(htmlform)
+        htmlform.submit();
+        htmlBody.removeChild(htmlform);
+      
+    }
+
+}

@@ -1,0 +1,10 @@
+{
+    "manifest_version": 3,
+    "version": "1.1",
+    "name": "leads tracker",
+    "action":{
+        "default_popup": "exn.html",
+        "default_icon": "LOGO.png"
+        },
+    "permissions": ["tabs"]
+}

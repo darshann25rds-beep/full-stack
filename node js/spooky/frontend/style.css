@@ -1,0 +1,92 @@
+@font-face{
+    font-family: "spooky";
+    src: url("fonts/spooky.ttf");
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+body{
+    height:100vh;
+
+    font-family:"spooky";
+    color:white;
+    text-align:center;
+
+    background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+    url("giphy/face.gif");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+}
+
+
+#nav{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+
+    padding:30px 50px;
+    gap:40px;
+}
+
+.lin{
+    text-decoration:none;
+    color:white;
+    font-size:28px;
+    letter-spacing:2px;
+    transition:.3s;
+}
+
+.lin:hover{
+    color:#c40000;
+    text-shadow:0 0 12px red;
+}
+
+
+#title{
+    margin-top:60px;
+}
+
+#title h1{
+    font-size:100px;
+    letter-spacing:5px;
+    margin:0;
+    line-height:0.95;
+    text-shadow:
+        0 0 10px rgba(255,0,0,.4),
+        0 0 25px rgba(255,0,0,.2);
+}
+
+#desc{
+    margin-top:130px;
+}
+
+#desc h2{
+    font-size:40px;
+    font-weight:normal;
+    letter-spacing:2px;
+    line-height:1.5;
+    text-shadow:0 0 8px rgba(255,255,255,.2);
+}
+
+
+footer{
+    position:fixed;
+    bottom:20px;
+    width:100%;
+}
+
+footer p{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:14px;
+    color:#ddd;
+    letter-spacing:1px;
+}

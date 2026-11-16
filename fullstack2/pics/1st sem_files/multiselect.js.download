@@ -1,0 +1,56 @@
+/**
+ * MultiSelect based on Bootstrap 5
+ * https://www.vit.ac.in/
+ *
+ * multiselect.js
+ * Copyright Software Development Cell (SDC), Vellore Institute of Technology (VIT)
+ * 
+ *
+ * Date: Dec-2023 
+ */
+
+
+class MultiSelect {
+
+    activate(params) {
+        if (params.name == undefined) {
+            throw new Error('name is mandatory')
+        }
+
+        
+        if(params.height !== undefined) {
+            let container=document.querySelector("ul#ddpdm1"+params.name);
+            container.style.height=params.height;
+        }
+
+        let callbackFunc = function searchText(event) {
+            let parentList=  document.querySelector("ul#ddpdm1"+params.name);
+            let labelList = parentList.getElementsByTagName("span");
+            let typedText = event.target.value.toLowerCase();
+            for (var i = 0; i < labelList.length; ++i) {
+                var searchValue = labelList[i].textContent.toLowerCase();
+                if (searchValue.includes(typedText)) {
+                    labelList[i].parentElement.classList.remove("d-none");
+                } else {
+                    labelList[i].parentElement.classList.add("d-none");
+                }
+            }
+        };
+
+        const searchBar = document.querySelector('#ddsib1' + params.name);
+        searchBar.addEventListener('input', callbackFunc);
+
+        let delFunc= function(event) {
+            document.querySelector('#ddsib1' + params.name).value="";
+            let parentList=  document.querySelector("ul#ddpdm1"+params.name);
+            let labelList = parentList.getElementsByTagName("label");
+            for (var i = 0; i < labelList.length; ++i) {
+                labelList[i].classList.remove("d-none");
+            }
+        }
+        const delBtn1 = document.querySelector('#ddsb3' + params.name);
+        delBtn1.addEventListener('click', delFunc);
+
+    }
+
+}

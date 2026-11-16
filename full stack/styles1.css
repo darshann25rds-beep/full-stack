@@ -1,0 +1,17 @@
+body {
+    background-image: url("giphy/jet.gif");
+    background-size: cover;
+    color: rgb(194, 228, 224);
+    font-size: medium;
+    font-family: "Cinzel Decorative", serif;
+    font-weight: 400;
+    font-style: normal;
+    margin-top: auto;
+
+}
+
+.info{
+    display: block;
+    padding: 20px;
+    justify-content: space-around;
+}

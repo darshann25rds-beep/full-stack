@@ -1,0 +1,12 @@
+{
+  "name": "wishpered-horror",
+  "version": "1.0.0",
+  "description": "a place where ppl read and share spooky encountered",
+  "license": "ISC",
+  "author": "DARSHAN KRISHNA BS",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
